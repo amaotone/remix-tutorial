@@ -2,7 +2,6 @@ import type { LinksFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Form,
-  Link,
   Links,
   Meta,
   NavLink,
@@ -10,6 +9,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useNavigation,
 } from "@remix-run/react";
 import appStylesHref from "./app.css?url";
 import { createEmptyContact, getContacts } from "./data";
@@ -30,6 +30,7 @@ export const loader = async () => {
 
 export default function App() {
   const { contacts } = useLoaderData<typeof loader>();
+  const navigation = useNavigation();
   return (
     <html lang="en">
       <head>
@@ -86,17 +87,12 @@ export default function App() {
                 <i>No contacts</i>
               </p>
             )}
-            <ul>
-              <li>
-                <Link to={`/contacts/1`}>Your Name</Link>
-              </li>
-              <li>
-                <Link to={`/contacts/2`}>Your Friend</Link>
-              </li>
-            </ul>
           </nav>
         </div>
-        <div id="detail">
+        <div
+          id="detail"
+          className={navigation.state === "loading" ? "loading" : ""}
+        >
           <Outlet />
         </div>
         <ScrollRestoration />
